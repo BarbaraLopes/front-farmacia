@@ -1,0 +1,65 @@
+<div class="container">
+  <div class="ui-g">
+
+    <form autocomplete="off" (ngSubmit)="pesquisar()">
+
+      <div class="ui-g-12">
+        <h1>Estoque de medicamentos</h1>
+      </div>
+
+      <div class="ui-g-12 ui-fluid">
+        <label>Digite o nome do medicamento:</label>
+        <input pInputText type="text" name="descricao" [(ngModel)]="filtro.descricao">
+      </div>
+
+      <div class="ui-g-12">
+        <button pButton type="submit" label="Pesquisar"></button>
+      </div>
+
+    </form>
+  </div>
+
+  <div class="ui-g">
+    <div class="ui-g-12">
+      <p-dataTable [value]="medicamentos" [responsive]="true" emptyMessage="Nenhum medicamento encontrado" [paginator]="true" [rows]="filtro.itensPorPagina"
+        [lazy]="true" [totalRecords]="totalRegistros" (onLazyLoad)="aoMudarPagina($event)">
+        <p-column field="principioAtivo" header="Medicamento"></p-column>
+        <p-column field="nomeComercial" header="NomeComercial"></p-column>
+        <p-column field="dosagem" header="Dosagem"></p-column>
+        <p-column field="tipo.descricao" header="Forma farmacêutica"></p-column>
+        <p-column field="status.descricao" header="Status"></p-column>
+        <p-column header="Vencimento" styleClass="col-data">
+          <ng-template let-med="rowData" pTemplate="body">
+            <span>{{ med.dataVencimento | date:'dd/MM/yyyy' }}</span>
+          </ng-template>
+        </p-column>
+        <p-column styleClass="col-acoes">
+          <ng-template let-med="rowData" pTemplate="body">
+            <button pButton icon="fa fa-minus" [disabled]="med.status.descricao === 'Disponível'" pTooltip="Excluir" tooltipPosition="top" (click)="excluir(med)"></button>
+          </ng-template>
+        </p-column>
+      </p-dataTable>
+    </div>
+
+  </div>
+
+  <div class="ui-g-12">
+    <a pButton label="Novo Medicamento" routerLink="/medicamentos/novo"></a>
+  </div>
+
+</div>
+<form autocomplete="off" (ngSubmit)="salvar()" [formGroup]="formulario">
+<p-dialog header="Remover do estoque" [(visible)]="display" [width]="550" [responsive]="true">
+  <div class="ui-g">
+    <div class="ui-g-12 ui-fluid">
+      <label>Motivo</label>
+      <textarea pInputTextarea rows="3" name="motivo" formControlName="motivo"></textarea>
+      <app-message [control]="formulario.get('motivo')" error="required" text="Informe um motivo"></app-message>
+    </div>
+  </div>
+  <p-footer>
+    <button type="button" pButton icon="fa fa-trash" (click)="atualizarStatusParaExcluido()" label="Excluir"></button>
+    <button type="button" pButton icon="fa fa-close" (click)="display=false" label="Cancelar" class="ui-button-secondary"></button>
+  </p-footer>
+</p-dialog>
+</form>

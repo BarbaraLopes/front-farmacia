@@ -1,0 +1,60 @@
+<div class="container">
+  <form autocomplete="off" (ngSubmit)="salvar()" [formGroup]="formulario">
+    <div class="ui-g">
+      <div class="ui-g-12">
+        <h1>Cadastro</h1>
+      </div>
+
+      <div class="ui-g-12 ui-md-7 ui-fluid">
+        <label>Medicamento</label>
+        <p-autoComplete formControlName="principioAtivo" name="medicamento" [suggestions]="nomesFiltrados" (completeMethod)="filteredMedicamentoSingle($event)"
+          [size]="30" [minLength]="1">
+        </p-autoComplete>
+        <app-message [control]="formulario.get('principioAtivo')" error="obrigatoriedade" text="Informe um medicamento"></app-message>
+      </div>
+      <div class="ui-g-6  ui-md-3 ui-fluid">
+        <label>Lote</label>
+        <input pInputText type="text" name="lote" formControlName="lote">
+
+        <app-message [control]="formulario.get('lote')" error="obrigatoriedade" text="Informe o lote"></app-message>
+        <app-message [control]="formulario.get('lote')" error="tamanhoMinimo" text="Mínimo de {{ formulario.get('lote').errors?.tamanhoMinimo?.tamanho }} caracteres"></app-message>
+      </div>
+      <div class="ui-g-6 ui-md-2 ui-fluid">
+        <label>Dosagem</label>
+        <input pInputText type="text" name="dosagem" formControlName="dosagem">
+        <app-message [control]="formulario.get('dosagem')" error="obrigatoriedade" text="Informe uma dosagem"></app-message>
+      </div>
+      <div class="ui-g-12 ui-md-5 ui-fluid">
+        <label>Nome comercial</label>
+        <input pInputText type="text" name="comercial" formControlName="nomeComercial">
+      </div>
+      <div class="ui-g-6 ui-md-2 ui-fluid">
+        <label>Laboratório</label>
+        <input pInputText type="text" name="lab" formControlName="laboratorio">
+      </div>
+      <div class="ui-g-6 ui-md-2 ui-fluid" formGroupName="tipo">
+        <label>Forma farmacêutica</label>
+        <p-dropdown name="tipo" [options]="tipos" placeholder="Selecione" [autoWidth]="false" formControlName="id"></p-dropdown>
+      </div>
+      <div class="ui-g-6 ui-md-1 ui-fluid">
+        <label>Quantidade</label>
+        <input pInputText type="number" name="qtd-comp" disabled="true">
+
+      </div>
+      <div class="ui-g-6 ui-md-2 ui-fluid">
+        <label>Data de vencimento</label>
+        <p-calendar name="vencimento" dateFormat="dd/mm/yy" [inline]="false" [readonlyInput]="false" [showIcon]="false" formControlName="dataVencimento"></p-calendar>
+
+        <app-message [control]="formulario.get('dataVencimento')" error="required" text="Informe uma data de vencimento"></app-message>
+      </div>
+      <div class="ui-g-12 ui-fluid">
+        <label>Observação</label>
+        <textarea pInputTextarea rows="3" name="observacao" formControlName="outrasEspecificacoes"></textarea>
+      </div>
+      <div class="ui-g-12">
+        <button pButton type="submit" label="Salvar" [disabled]="formulario.invalid"></button>
+        <a routerLink="/medicamentos">Voltar para a pesquisa</a>
+      </div>
+    </div>
+  </form>
+</div>
